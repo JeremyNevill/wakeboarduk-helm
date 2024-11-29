@@ -1,3 +1,4 @@
+site: wsf
 environment: prod
 ingress:
   enabled: true
@@ -8,3 +9,4 @@ image:
   tag: sha-d69ba04
 imagePullSecrets:
   - name: ghcr-login-secret
+
