@@ -1,0 +1,10 @@
+environment: prod
+ingress:
+  enabled: true
+  host: www.wakesurfuk.com
+replicaCount: 1
+image:
+  repository: ghcr.io/jeremynevill/wakeboarduk
+  tag: sha-d69ba04
+imagePullSecrets:
+  - name: ghcr-login-secret
