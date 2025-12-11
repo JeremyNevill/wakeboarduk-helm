@@ -1,0 +1,11 @@
+site: wkb
+environment: prod
+ingress:
+  enabled: true
+  host: www.wakeboard.com
+replicaCount: 1
+image:
+  repository: ghcr.io/jeremynevill/wakeboarduk
+  tag: sha-b748a9f
+imagePullSecrets:
+  - name: ghcr-login-secret
