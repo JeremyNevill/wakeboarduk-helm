@@ -1,4 +1,4 @@
-site: wkb
+site: wdc
 environment: prod
 ingress:
   enabled: true
