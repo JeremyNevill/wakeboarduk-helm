@@ -6,7 +6,7 @@ ingress:
 replicaCount: 1
 image:
   repository: ghcr.io/jeremynevill/wakeboarduk
-  tag: sha-f775f38
+  tag: sha-27f0b99
 imagePullSecrets:
   - name: ghcr-login-secret
 
