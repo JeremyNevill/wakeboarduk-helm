@@ -41,6 +41,27 @@ service:
   type: ClusterIP
   port: 80
 
+# Probe paths stay on "/" until an image with a dedicated /healthz endpoint is
+# deployed; then switch the paths here. The generous liveness thresholds are
+# deliberate: "/" hits the database, and the kubelet default 1s timeout was
+# restarting pods whenever the app was briefly busy.
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
 ingress:
   enabled: false
   annotations: {}
