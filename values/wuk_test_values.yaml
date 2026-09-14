@@ -2,11 +2,7 @@ environment: test
 ingress:
   enabled: true
   host: test.wakeboard.co.uk
-# Scaled to zero 2026-07-28: the test DB login gets SQL error 4060 (cannot open
-# TrickDex_Test) since the credential rotation, so the pod crash-loops (~9000
-# restarts). Restore to 1 once the DB access is fixed — see
-# WakeboardUK/Docs/DB_CREDENTIAL_ROTATION.md.
-replicaCount: 0
+replicaCount: 1
 image:
   repository: ghcr.io/jeremynevill/wakeboarduk
   tag: sha-cf0f5da
