@@ -1,11 +1,13 @@
-{{- if .Values.ingress.enabled -}} 
+{{- if .Values.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Values.site }}-{{ .Values.environment }}-ingress
   namespace: {{ .Values.site }}-{{ .Values.environment }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    kubernetes.io/ingress.class: nginx
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   tls:
     - hosts:
@@ -22,4 +24,33 @@ spec:
                 name: {{ include "wuk.fullname" . }}
                 port:
                   number: 80
+{{- /* ingress-nginx applies annotations to the whole Ingress, so the upload path needs its own object. */}}
+{{- if and .Values.ingress.upload .Values.ingress.upload.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.site }}-{{ .Values.environment }}-ingress-upload
+  namespace: {{ .Values.site }}-{{ .Values.environment }}
+  {{- with .Values.ingress.upload.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.site }}-{{ .Values.environment }}-tls-secret
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.upload.path }}
+            pathType: {{ .Values.ingress.upload.pathType }}
+            backend:
+              service:
+                name: {{ include "wuk.fullname" . }}
+                port:
+                  number: 80
+{{- end }}
 {{- end }}
