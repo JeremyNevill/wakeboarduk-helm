@@ -37,6 +37,10 @@ spec:
           - mountPath: /app/secrets
             name: secrets
             readOnly: true
+          {{- if and .Values.tmpVolume .Values.tmpVolume.enabled }}
+          - mountPath: {{ .Values.tmpVolume.mountPath }}
+            name: tmp
+          {{- end }}
           ports:
             - name: http
               containerPort: 80
@@ -52,6 +56,11 @@ spec:
         secret:
           defaultMode: 420
           secretName: {{ .Values.site }}-{{ .Values.environment }}-appsettings-secret
+      {{- if and .Values.tmpVolume .Values.tmpVolume.enabled }}
+      - name: tmp
+        emptyDir:
+          sizeLimit: {{ .Values.tmpVolume.sizeLimit }}
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
